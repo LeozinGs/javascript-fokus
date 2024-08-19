@@ -15,6 +15,8 @@ O que foi reforçado nesse projeto:
 - Recuperação de dados de input.
 - Criação de listas.
 - Mudança de texto dentro de uma tag.
+- Manipulação de elementos na localStorage.
+- Criação de eventos customizados.
 - Entre outras coisas.
 
 ###
