@@ -2,8 +2,18 @@ const btnAdicionarTarefa = document.querySelector('.app__button--add-task');
 const formAdicionarTarefa = document.querySelector('.app__form-add-task');
 const textArea = document.querySelector('.app__form-textarea');
 const ulTarefas = document.querySelector('.app__section-task-list');
+const formBotaoCancelar = document.querySelector('.app__form-footer__button--cancel');
 
 const tarefas = JSON.parse(localStorage.getItem('tarefas')) || [];
+
+function atualizarTarefas() {
+    localStorage.setItem('tarefas', JSON.stringify(tarefas));
+}
+
+function cancelarTarefa() {
+    textArea.value = '';
+    formAdicionarTarefa.classList.add('hidden');
+}
 
 function criarElementoTarefa(tarefa) {
     const li = document.createElement('li');
@@ -18,11 +28,22 @@ function criarElementoTarefa(tarefa) {
     `;
 
     const paragrafo = document.createElement('p');
-    paragrafo.textContent = tarefa.descrição;
+    paragrafo.textContent = tarefa.descricao;
     paragrafo.classList.add('app__section-task-list-item-description');
 
     const botao = document.createElement('button');
     botao.classList.add('app_button-edit');
+
+    botao.onclick = () => {
+        // debugger
+        const novaDescricao = prompt('Qual é o novo nome da tarefa?');
+        // console.log('nova descrição da tarefa: ' + novaDescricao);
+        if (novaDescricao) {
+            paragrafo.textContent = novaDescricao;
+            tarefa.descricao = novaDescricao;
+            atualizarTarefas();
+        }
+    };
 
     const imagemBotao = document.createElement('img');
 
@@ -36,6 +57,10 @@ function criarElementoTarefa(tarefa) {
     return li;
 }
 
+formBotaoCancelar.addEventListener('click', () => {
+    cancelarTarefa();
+});
+
 btnAdicionarTarefa.addEventListener('click', () => {
     formAdicionarTarefa.classList.toggle('hidden');
 });
@@ -43,7 +68,7 @@ btnAdicionarTarefa.addEventListener('click', () => {
 formAdicionarTarefa.addEventListener('submit', (evento) => {
     evento.preventDefault();
     const tarefa = {
-        descrição: textArea.value
+        descricao: textArea.value
     };
 
     tarefas.push(tarefa);
@@ -52,7 +77,7 @@ formAdicionarTarefa.addEventListener('submit', (evento) => {
     ulTarefas.append(elementoTarefa);
 
     //Guardando dados entre navegações.
-    localStorage.setItem('tarefas', JSON.stringify(tarefas));
+    atualizarTarefas();
 
     //Limpando formulário e escondendo ele
     textArea.value = '';
